@@ -21,7 +21,7 @@ query_template_star= Template("""construct {
   bind (STRBEFORE(STRAFTER(STR(?x), "://"),"/") as ?xp) .
   bind (STRBEFORE(STRAFTER(STR(?z), "://"),"/") as ?zp) .
   filter (?xp != ?zp)
-} limit 5000000 
+} limit $placeholder_limit offset $placeholder_offset
 """)
 
 query_template_chain=Template("""construct {
@@ -36,16 +36,16 @@ query_template_chain=Template("""construct {
   bind (STRBEFORE(STRAFTER(STR(?x), "://"),"/") as ?xp) .
   bind (STRBEFORE(STRAFTER(STR(?y), "://"),"/") as ?yp) .
   filter (?xp != ?yp)
-} limit 5000000 
+} limit $placeholder_limit offset $placeholder_offset
 """)
 
 # headers = {
 #     "Accept": "text/ntriples"
 # }
 
-def construct_query_virtuoso(endpoint_url, query_template,pred):
+def construct_query_virtuoso(endpoint_url, query_template,pred,limit=1000000,offset=0):
 
-    query = query_template.substitute(placeholder=pred)
+    query = query_template.substitute(placeholder=pred,placeholder_limit=limit,placeholder_offset=offset)
     print(f"executing query: {query} on {endpoint_url}", file=sys.stderr)
 
 #    response = requests.get(endpoint_url, params={'query': query}, headers=headers)
