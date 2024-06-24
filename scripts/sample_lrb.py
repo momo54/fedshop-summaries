@@ -4,6 +4,7 @@ from SPARQLWrapper import SPARQLWrapper, N3,TURTLE,RDF
 from string import Template
 import requests
 from rdflib import Graph
+import os
 
 predicates=['<http://www.w3.org/2002/07/owl#sameAs>','<http://xmlns.com/foaf/0.1/based_near>']
 
@@ -67,8 +68,8 @@ if __name__ == "__main__":
     
     args = parser.parse_args()
 
-    if os.path.exists(output_file):
-        os.remove(output_file)
+    if os.path.exists(args.output_file):
+        os.remove(args.output_file)
     
     for predicat in predicates:
         results=construct_query_virtuoso(args.endpoint_url,query_template_star,predicat)
