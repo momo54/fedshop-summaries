@@ -1,0 +1,17 @@
+set blobs on;
+SPARQL
+define output:format "NT"
+construct {
+  ?z ?p ?o .
+  ?x ?p1 ?o1
+} WHERE {
+  ?x <http://xmlns.com/foaf/0.1/based_near> ?y .
+  ?z <http://xmlns.com/foaf/0.1/based_near> ?y .
+  filter (isIRI(?x) && isIRI(?y) && isIRI(?z)).
+  optional {?z ?p ?o}
+  optional {?x ?p1 ?o1}
+  filter (?x != ?z)
+  bind (STRBEFORE(STRAFTER(STR(?x), "://"),"/") as ?xp) .
+  bind (STRBEFORE(STRAFTER(STR(?z), "://"),"/") as ?zp) .
+  filter (?xp != ?zp)
+} limit 5000000 ;
